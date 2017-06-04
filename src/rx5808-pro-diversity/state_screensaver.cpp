@@ -8,10 +8,12 @@
 #include "state.h"
 #include "ui.h"
 
+#include "pstr_helper.h"
+
 
 static const unsigned char PROGMEM logo[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+    0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -102,30 +104,39 @@ void StateMachine::ScreensaverStateHandler::onButtonChange(
 void StateMachine::ScreensaverStateHandler::onInitialDraw() {
     Ui::clear();
 
-    if (showLogo) {
-        Ui::display.drawBitmap(
-            0,
-            0,
-            logo,
-            SCREEN_WIDTH,
-            SCREEN_HEIGHT,
-            WHITE
-        );
-    } else {
-        Ui::display.setTextColor(WHITE);
-
-        Ui::display.setTextSize(6);
-        Ui::display.setCursor(
-            SCREEN_WIDTH_MID - ((CHAR_WIDTH) * 6) / 2 * 2 - 3,
-            2);
-
-        Ui::display.print(Channels::getName(Receiver::activeChannel));
-
-        Ui::display.setTextSize(2);
-        Ui::display.setCursor(
-            SCREEN_WIDTH_MID - ((CHAR_WIDTH + 1) * 2) / 2 * 4 - 1,
-            SCREEN_HEIGHT - CHAR_HEIGHT * 2 - 2);
-        Ui::display.print(Channels::getFrequency(Receiver::activeChannel));
+    if (showLogo)
+    {
+//        Ui::display.drawBitmap(
+//            0,
+//            0,
+//            logo,
+//            SCREEN_WIDTH,
+//            SCREEN_HEIGHT,
+//            WHITE
+//        );
+      Ui::display.setTextColor(WHITE);
+      Ui::display.setTextSize(1);
+      Ui::display.setCursor(0, 0);
+      Ui::display.print(PSTR2("RSSI A: "));
+      Ui::display.setCursor((CHAR_WIDTH + 1) * 8, 0);
+      Ui::display.print(Receiver::rssiARaw);
+      Ui::display.setCursor(0, CHAR_HEIGHT * 2);
+      Ui::display.print(PSTR2("RSSI B: "));
+      Ui::display.setCursor((CHAR_WIDTH + 1) * 8, CHAR_HEIGHT * 2);
+      Ui::display.print(Receiver::rssiBRaw);
+    }
+    else
+    {
+      Ui::display.setTextColor(WHITE);
+      Ui::display.setTextSize(1);
+      Ui::display.setCursor(0, CHAR_HEIGHT);
+      Ui::display.print(PSTR2("RSSI A: "));
+      Ui::display.setCursor((CHAR_WIDTH + 1) * 8, CHAR_HEIGHT);
+      Ui::display.print(Receiver::rssiARaw);
+      Ui::display.setCursor(0, CHAR_HEIGHT * 3);
+      Ui::display.print(PSTR2("RSSI B: "));
+      Ui::display.setCursor((CHAR_WIDTH + 1) * 8, CHAR_HEIGHT * 3);
+      Ui::display.print(Receiver::rssiBRaw);
     }
 
     Ui::needDisplay();

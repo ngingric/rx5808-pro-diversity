@@ -129,8 +129,7 @@ void StateMachine::BandScanStateHandler::onInitialDraw() {
     Ui::display.print(Channels::getFrequency(Channels::getOrderedIndex(0)));
 
     Ui::display.setCursor(CHANNEL_TEXT_HIGH_X, CHANNEL_TEXT_HIGH_Y);
-    Ui::display.print(
-        Channels::getFrequency(Channels::getOrderedIndex(CHANNELS_SIZE - 1)));
+    Ui::display.print(Channels::getFrequency(Channels::getOrderedIndex(CHANNELS_SIZE - 1)));
 
     Ui::needDisplay();
 }
@@ -168,6 +167,13 @@ void StateMachine::BandScanStateHandler::onUpdateDraw() {
         PROGRESS_H,
         WHITE
     );
+
+      Ui::display.setTextColor(WHITE);
+      Ui::display.setTextSize(1);
+      Ui::display.setCursor(0, 0);
+      Ui::display.print(Receiver::rssiARaw);
+      Ui::display.setCursor(0, CHAR_HEIGHT * 2);
+      Ui::display.print(Receiver::rssiBRaw);
 
     Ui::needDisplay();
 }

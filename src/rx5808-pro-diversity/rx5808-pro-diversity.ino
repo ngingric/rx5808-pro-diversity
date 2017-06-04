@@ -130,10 +130,10 @@ void loop() {
         digitalWrite(PIN_BUZZER, HIGH);
     }
 
-    if (StateMachine::currentState != StateMachine::State::SCREENSAVER && StateMachine::currentState != StateMachine::State::BANDSCAN && (millis() - Buttons::lastChangeTime) > (SCREENSAVER_TIMEOUT * 1000))
-    {
-        StateMachine::switchState(StateMachine::State::SCREENSAVER);
-    }
+//    if (StateMachine::currentState != StateMachine::State::SCREENSAVER && StateMachine::currentState != StateMachine::State::BANDSCAN && (millis() - Buttons::lastChangeTime) > (SCREENSAVER_TIMEOUT * 1000))
+//    {
+//        StateMachine::switchState(StateMachine::State::SCREENSAVER);
+//    }
 }
 
 

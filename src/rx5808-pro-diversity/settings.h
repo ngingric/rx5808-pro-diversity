@@ -45,7 +45,7 @@ SOFTWARE.
 //#define USE_FLIP_SCREEN
 
 #ifdef OLED_128x64_ADAFRUIT_SCREENS
-    #define OLED_ADDRESS 0x3C // I2C address for display (0x3C or 0x3D, usually)
+    #define OLED_ADDRESS 0x78 // I2C address for display (0x3C or 0x3D, usually)
 #endif
 
 // === Receiver Module =========================================================
