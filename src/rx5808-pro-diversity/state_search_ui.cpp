@@ -8,14 +8,14 @@
 
 #define BORDER_GRAPH_L_X 59
 
-#define CHANNEL_TEXT_SIZE 5
+#define CHANNEL_TEXT_SIZE 1
 #define CHANNEL_TEXT_X 0
 #define CHANENL_TEXT_Y 0
 #define CHANNEL_TEXT_H (CHAR_HEIGHT * CHANNEL_TEXT_SIZE)
 
-#define FREQUENCY_TEXT_SIZE 2
-#define FREQUENCY_TEXT_X 6
-#define FREQUENCY_TEXT_Y (SCREEN_HEIGHT - (CHAR_HEIGHT * 2))
+#define FREQUENCY_TEXT_SIZE 1
+#define FREQUENCY_TEXT_X (CHAR_WIDTH + 1) * 3
+#define FREQUENCY_TEXT_Y 0
 #define FREQUENCY_TEXT_H (CHAR_HEIGHT * FREQUENCY_TEXT_SIZE)
 
 #define SCANBAR_BORDER_X 0
@@ -116,7 +116,8 @@ void StateMachine::SearchStateHandler::drawBorders() {
     );
 }
 
-void StateMachine::SearchStateHandler::drawChannelText() {
+void StateMachine::SearchStateHandler::drawChannelText()
+{
     display.setTextSize(CHANNEL_TEXT_SIZE);
     display.setTextColor(WHITE);
     display.setCursor(CHANNEL_TEXT_X, CHANENL_TEXT_Y);
@@ -124,7 +125,8 @@ void StateMachine::SearchStateHandler::drawChannelText() {
     display.print(Channels::getName(Receiver::activeChannel));
 }
 
-void StateMachine::SearchStateHandler::drawFrequencyText() {
+void StateMachine::SearchStateHandler::drawFrequencyText()
+{
     display.setTextSize(FREQUENCY_TEXT_SIZE);
     display.setTextColor(WHITE);
     display.setCursor(FREQUENCY_TEXT_X, FREQUENCY_TEXT_Y);
@@ -178,9 +180,13 @@ void StateMachine::SearchStateHandler::drawRssiGraph() {
 
         display.setCursor(RX_TEXT_X, RX_TEXT_A_Y);
         display.print(PSTR2("B"));
+        Ui::display.setCursor(RX_TEXT_X+(CHAR_WIDTH + 1) * 2, RX_TEXT_A_Y);
+        Ui::display.print(Receiver::rssiBRaw);
 
         display.setCursor(RX_TEXT_X, RX_TEXT_B_Y);
         display.print(PSTR2("A"));
+        Ui::display.setCursor(RX_TEXT_X+(CHAR_WIDTH + 1) * 2, RX_TEXT_B_Y);
+        Ui::display.print(Receiver::rssiARaw);
     #else
         Ui::drawGraph(
             Receiver::rssiALast,
