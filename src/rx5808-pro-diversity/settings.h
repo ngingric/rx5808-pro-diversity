@@ -117,6 +117,8 @@ SOFTWARE.
 #define PIN_LED 13
 #define PIN_BUZZER 6 // Must be an active buzzer, not passive.
 
+#define WS2812B_LED_PIN 5
+
 #define PIN_SPI_DATA 10
 #define PIN_SPI_SLAVE_SELECT 11
 #define PIN_SPI_CLOCK 12

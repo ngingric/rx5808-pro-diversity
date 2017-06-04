@@ -45,12 +45,7 @@ SOFTWARE.
 
 #include "ui.h"
 
-
-static void globalMenuButtonHandler(
-    Button button,
-    Buttons::PressType pressType
-);
-
+static void globalMenuButtonHandler(Button button, Buttons::PressType pressType);
 
 void setup()
 {
@@ -105,7 +100,7 @@ void setupPins() {
 
     pinMode(PIN_SPI_SLAVE_SELECT, OUTPUT);
     pinMode(PIN_SPI_DATA, OUTPUT);
-	pinMode(PIN_SPI_CLOCK, OUTPUT);
+    pinMode(PIN_SPI_CLOCK, OUTPUT);
 
     digitalWrite(PIN_SPI_SLAVE_SELECT, HIGH);
     digitalWrite(PIN_SPI_CLOCK, LOW);
@@ -125,26 +120,27 @@ void loop() {
     Ui::update();
     EepromSettings.update();
 
-    if (
-        StateMachine::currentState != StateMachine::State::SCREENSAVER
-        && StateMachine::currentState != StateMachine::State::BANDSCAN
-        && (millis() - Buttons::lastChangeTime) >
-            (SCREENSAVER_TIMEOUT * 1000)
-    ) {
+
+    if(Receiver::rssiARaw > 250)
+    {
+        digitalWrite(PIN_BUZZER, LOW);
+    }
+    else
+    {
+        digitalWrite(PIN_BUZZER, HIGH);
+    }
+
+    if (StateMachine::currentState != StateMachine::State::SCREENSAVER && StateMachine::currentState != StateMachine::State::BANDSCAN && (millis() - Buttons::lastChangeTime) > (SCREENSAVER_TIMEOUT * 1000))
+    {
         StateMachine::switchState(StateMachine::State::SCREENSAVER);
     }
 }
 
 
-static void globalMenuButtonHandler(
-    Button button,
-    Buttons::PressType pressType
-) {
-    if (
-        StateMachine::currentState != StateMachine::State::MENU &&
-        button == Button::MODE &&
-        pressType == Buttons::PressType::HOLDING
-    ) {
+static void globalMenuButtonHandler(Button button, Buttons::PressType pressType)
+{
+    if (StateMachine::currentState != StateMachine::State::MENU && button == Button::MODE && pressType == Buttons::PressType::HOLDING)
+    {
         StateMachine::switchState(StateMachine::State::MENU);
     }
 }
