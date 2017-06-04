@@ -45,7 +45,11 @@ SOFTWARE.
 
 #include "ui.h"
 
+#include <FastLED.h>
+
 static void globalMenuButtonHandler(Button button, Buttons::PressType pressType);
+
+CRGB ws2812b_leds[WS2812B_LED_COUNT];
 
 void setup()
 {
@@ -78,9 +82,19 @@ void setup()
 
     // Switch to initial state.
     StateMachine::switchState(StateMachine::State::SEARCH);
+
+  FastLED.addLeds<NEOPIXEL, WS2812B_LED_PIN>(ws2812b_leds, WS2812B_LED_COUNT);
+  
+  for (int i = 0; i < WS2812B_LED_COUNT; i++)
+  {
+    ws2812b_leds[i] = CRGB::Yellow;
+  }
+
+  FastLED.show();
 }
 
-void setupPins() {
+void setupPins()
+{
     pinMode(PIN_LED, OUTPUT);
     pinMode(PIN_BUZZER, OUTPUT);
     pinMode(PIN_BUTTON_UP, INPUT_PULLUP);
@@ -107,13 +121,18 @@ void setupPins() {
     digitalWrite(PIN_SPI_DATA, LOW);
 }
 
-void setupSettings() {
+void setupSettings()
+{
     EepromSettings.load();
     Receiver::setChannel(EepromSettings.startChannel);
 }
 
 
-void loop() {
+boolean buzz = true;
+uint32_t buzz_start_time = 0;
+
+void loop()
+{
     Receiver::update();
     Buttons::update();
     StateMachine::update();
@@ -121,19 +140,42 @@ void loop() {
     EepromSettings.update();
 
 
-    if(Receiver::rssiARaw > 250)
+  if(millis() - buzz_start_time > BUZZ_MS_TIME)
+  {
+    buzz = false;
+  }
+
+  if(Receiver::rssiARaw > EepromSettings.rssiAMax )
+  {
+    buzz = true;
+    buzz_start_time = millis();
+  }
+
+  if(buzz)
+  {
+    digitalWrite(PIN_BUZZER, LOW);
+
+    for(int i = 0; i < WS2812B_LED_COUNT; i++)
     {
-        digitalWrite(PIN_BUZZER, LOW);
+      ws2812b_leds[i] = CRGB::Blue;
     }
-    else
+  }
+  else
+  {
+    digitalWrite(PIN_BUZZER, HIGH);
+
+    for(int i = 0; i < WS2812B_LED_COUNT; i++)
     {
-        digitalWrite(PIN_BUZZER, HIGH);
+      ws2812b_leds[i] = CRGB::Red;
     }
 
-//    if (StateMachine::currentState != StateMachine::State::SCREENSAVER && StateMachine::currentState != StateMachine::State::BANDSCAN && (millis() - Buttons::lastChangeTime) > (SCREENSAVER_TIMEOUT * 1000))
-//    {
-//        StateMachine::switchState(StateMachine::State::SCREENSAVER);
-//    }
+    for(int i = 0; i < WS2812B_LED_COUNT * (Receiver::rssiARaw - EepromSettings.rssiAMin) / (EepromSettings.rssiAMax - EepromSettings.rssiAMin); i++)
+    {
+      ws2812b_leds[i] = CRGB::Green;
+    }
+  }
+
+  FastLED.show();
 }
 
 

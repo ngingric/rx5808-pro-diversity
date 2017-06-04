@@ -45,7 +45,7 @@ SOFTWARE.
 //#define USE_FLIP_SCREEN
 
 #ifdef OLED_128x64_ADAFRUIT_SCREENS
-    #define OLED_ADDRESS 0x78 // I2C address for display (0x3C or 0x3D, usually)
+    #define OLED_ADDRESS 0x3C // I2C address for display (0x3C or 0x3D, usually)
 #endif
 
 // === Receiver Module =========================================================
@@ -114,10 +114,10 @@ SOFTWARE.
 #define PIN_BUTTON_DOWN 4
 #define PIN_BUTTON_SAVE 5
 
+#define WS2812B_LED_PIN 5
+
 #define PIN_LED 13
 #define PIN_BUZZER 6 // Must be an active buzzer, not passive.
-
-#define WS2812B_LED_PIN 5
 
 #define PIN_SPI_DATA 10
 #define PIN_SPI_SLAVE_SELECT 11
@@ -189,7 +189,7 @@ SOFTWARE.
 
 // RSSI default raw range.
 #define RSSI_MIN_VAL 90
-#define RSSI_MAX_VAL 220
+#define RSSI_MAX_VAL 300
 
 // 75% threshold, when channel is printed in spectrum.
 #define RSSI_SEEK_FOUND 75
@@ -212,5 +212,11 @@ SOFTWARE.
 
 // Time needed to hold mode to get to menu
 #define BUTTON_WAIT_FOR_MENU 1000
+
+
+#define BUZZ_MS_TIME 1000 // Milliseconds for the buzzer to be on
+
+
+#define WS2812B_LED_COUNT 8
 
 #endif // file_defined
